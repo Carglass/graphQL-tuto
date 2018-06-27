@@ -18,7 +18,6 @@ module.exports = {
     });
   },
   createTag: function({ input }) {
-    console.log(input);
     return db.Tag.create(input).then(data => {
       return new Tag(data._id.toString(), {
         name: data.name,

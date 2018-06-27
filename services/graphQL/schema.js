@@ -18,5 +18,6 @@ module.exports = buildSchema(`
 
   type Mutation {
     createTag(input: TagInput): Tag
+    
   }
 `);
