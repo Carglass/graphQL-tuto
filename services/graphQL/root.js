@@ -8,6 +8,19 @@ class Tag {
   }
 }
 
+class Chakiboo {
+  constructor(id, {title, code, description, tags, language, howToUse, private}){
+    this.id = id;
+    this.title = title;
+    this.code = code;
+    this.description = description;
+    this.tags = tags;
+    this.language = language;
+    this.howToUse = howToUse;
+    this.isPrivate = isPrivate
+  }
+}
+
 module.exports = {
   tag: function({ id }) {
     return db.Tag.findById(id).then(data => {

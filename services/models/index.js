@@ -1,3 +1,4 @@
 module.exports = {
-  Tag: require("./Tag")
+  Tag: require("./Tag"),
+  Chakiboo: require("./Chakiboo")
 };
