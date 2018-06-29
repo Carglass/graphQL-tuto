@@ -7,17 +7,52 @@ module.exports = buildSchema(`
     color: String
   }
 
-  input TagInput {
+  type Chakiboo {
+    id: ID!
+    title: String
+    code: String
+    description: String
+    tags: [String]
+    language: String
+    howToUse: String
+    isPrivate: Boolean
+  }
+
+  input TagCreationInput {
     name: String!
     color: String
   }
 
+  input ChakibooCreationInput {
+    title: String
+    code: String
+    description: String
+    tags: [String]
+    language: String
+    howToUse: String
+    isPrivate: Boolean
+  }
+
+  input ChakibooUpdateInput {
+    id: ID!
+    title: String
+    code: String
+    description: String
+    tags: [String]
+    language: String
+    howToUse: String
+    isPrivate: Boolean
+  }
+
   type Query {
     tag(id: ID!): Tag
+    chakiboos: [Chakiboo]
+    chakiboo(id: ID): Chakiboo
   }
 
   type Mutation {
-    createTag(input: TagInput): Tag
-    
+    createTag(input: TagCreationInput): Tag
+    createChakiboo(input: ChakibooCreationInput): Chakiboo
+    updateChakiboo(input: ChakibooUpdateInput): Chakiboo
   }
 `);
