@@ -112,5 +112,14 @@ module.exports = {
         isPrivate: data.isPrivate
       });
     });
+  },
+  deleteChakiboo: function({ id }) {
+    return db.Chakiboo.findByIdAndRemove(id)
+      .then(data => {
+        return { id: data._id, status: "ok" };
+      })
+      .catch(err => {
+        return { id: id, status: "failure" };
+      });
   }
 };

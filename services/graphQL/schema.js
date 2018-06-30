@@ -44,6 +44,11 @@ module.exports = buildSchema(`
     isPrivate: Boolean
   }
 
+  type ChakibooDeletePayload {
+    id: ID!
+    status: String
+  }
+
   type Query {
     tag(id: ID!): Tag
     chakiboos: [Chakiboo]
@@ -54,5 +59,6 @@ module.exports = buildSchema(`
     createTag(input: TagCreationInput): Tag
     createChakiboo(input: ChakibooCreationInput): Chakiboo
     updateChakiboo(input: ChakibooUpdateInput): Chakiboo
+    deleteChakiboo(id: ID!): ChakibooDeletePayload
   }
 `);
