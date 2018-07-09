@@ -2,6 +2,7 @@ var express = require("express");
 var graphqlHTTP = require("express-graphql");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var cors = require("cors");
 
 // Construct a schema, using GraphQL schema language
 
@@ -14,6 +15,7 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/kettlecat";
 var app = express();
 
 // Configure middleware
+app.use(cors());
 
 // Use GraphQL to handle requests
 app.use(
