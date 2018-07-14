@@ -14,6 +14,9 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/kettlecat";
 // Initialize Express
 var app = express();
 
+//authentication
+require("./services/authentication/auth")(app);
+
 // Configure middleware
 app.use(cors());
 
@@ -30,7 +33,7 @@ app.use(
 // Use morgan logger for logging requests
 app.use(logger("dev"));
 
-// Use express.static to serve the public folder as a static directory
+// Static directory
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
