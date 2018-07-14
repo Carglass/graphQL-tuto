@@ -14,7 +14,10 @@ var UserSchema = new Schema({
   userID: {
     type: String,
     required: true
-  }
+  },
+  chakiboos: [{ type: Schema.Types.ObjectId, ref: "Chakiboo" }],
+  secretChakiboos: [{ type: Schema.Types.ObjectId, ref: "Chakiboo" }],
+  likedChakiboos: [{ type: Schema.Types.ObjectId, ref: "Chakiboo" }]
 });
 
 // This creates our model from the above schema, using mongoose's model method
