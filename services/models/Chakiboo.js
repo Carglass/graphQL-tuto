@@ -30,7 +30,8 @@ var ChakibooSchema = new Schema({
   },
   isPrivate: {
     type: Boolean
-  }
+  },
+  author: { type: Schema.Types.ObjectId, ref: "User" }
 });
 
 // This creates our model from the above schema, using mongoose's model method
