@@ -70,7 +70,7 @@ module.exports = app => {
         }
 
         passport.authenticate("local")(req, res, function() {
-          res.redirect("/");
+          res.json(req.user.username);
         });
       }
     );
