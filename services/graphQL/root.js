@@ -11,7 +11,7 @@ class Tag {
 class Chakiboo {
   constructor(
     id,
-    { title, code, description, tags, language, howToUse, isPrivate }
+    { title, code, description, tags, language, howToUse, isPrivate, author }
   ) {
     this.id = id;
     this.title = title;
@@ -21,6 +21,17 @@ class Chakiboo {
     this.language = language;
     this.howToUse = howToUse;
     this.isPrivate = isPrivate;
+    this.author = author;
+  }
+}
+
+class Author {
+  constructor(id, { username, chakiboos, secretChakiboos, likedChakiboos }) {
+    this.id = id;
+    this.username = username;
+    this.chakiboos = chakiboos;
+    this.secretChakiboos = secretChakiboos;
+    this.likedChakiboos = likedChakiboos;
   }
 }
 
@@ -73,18 +84,44 @@ module.exports = {
       });
     });
   },
+  author: function({ id }) {
+    return db.User.findById(id).then(data => {
+      return new Author(data._id, {
+        username: data.username,
+        chakiboos: data.chakiboos,
+        secretChakiboos: data.secretChakiboos,
+        likedChakiboos: data.likedChakiboos
+      });
+    });
+  },
   createChakiboo: function({ input }, context) {
     if (context.user) {
-      return db.Chakiboo.create(input).then(data => {
-        return new Chakiboo(data._id, {
-          title: data.title,
-          code: data.code,
-          description: data.description,
-          tags: data.tags,
-          language: data.language,
-          howToUse: data.howToUse,
-          isPrivate: data.isPrivate,
-          author: context.user.id
+      const newChakiboo = {
+        title: input.title,
+        code: input.code,
+        description: input.description,
+        tags: input.tags,
+        language: input.language,
+        howToUse: input.howToUse,
+        isPrivate: input.isPrivate,
+        author: context.user.id
+      };
+      return db.Chakiboo.create(newChakiboo).then(data => {
+        return db.User.findById(context.user.id).then(dbAuthor => {
+          dbAuthor.chakiboos.push(data);
+          return dbAuthor.save().then(confirm => {
+            console.log(data);
+            return new Chakiboo(data._id, {
+              title: data.title,
+              code: data.code,
+              description: data.description,
+              tags: data.tags,
+              language: data.language,
+              howToUse: data.howToUse,
+              isPrivate: data.isPrivate,
+              author: data.author
+            });
+          });
         });
       });
     }

@@ -16,6 +16,15 @@ module.exports = buildSchema(`
     language: String
     howToUse: String
     isPrivate: Boolean
+    author: ID
+  }
+
+  type Author {
+    id: ID!
+    username: String
+    chakiboos: [ID]
+    secretChakiboos: [ID]
+    likedChakiboos: [ID]
   }
 
   input TagCreationInput {
@@ -53,6 +62,7 @@ module.exports = buildSchema(`
     tag(id: ID!): Tag
     chakiboos: [Chakiboo]
     chakiboo(id: ID): Chakiboo
+    author(id: ID): Author
   }
 
   type Mutation {
