@@ -4,6 +4,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 // Construct a schema, using GraphQL schema language
 
@@ -16,8 +17,10 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/kettlecat";
 var app = express();
 
 // Configure middleware
+app.use(express);
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cookieParser());
 
 //authentication
 require("./services/authentication/auth")(app);

@@ -81,6 +81,7 @@ module.exports = app => {
   });
 
   app.post("/login", passport.authenticate("local"), function(req, res) {
+    
     res.json(req.user.username);
   });
 
