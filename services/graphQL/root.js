@@ -94,6 +94,16 @@ module.exports = {
       });
     });
   },
+  me: function({ input }, context) {
+    return db.User.findById(context.user.id).then(data => {
+      return new Author(data._id, {
+        username: data.username,
+        chakiboos: data.chakiboos,
+        secretChakiboos: data.secretChakiboos,
+        likedChakiboos: data.likedChakiboos
+      });
+    });
+  },
   createChakiboo: function({ input }, context) {
     if (context.user) {
       const newChakiboo = {
@@ -126,32 +136,39 @@ module.exports = {
       });
     }
   },
-  updateChakiboo: function({ input }) {
-    return db.Chakiboo.findByIdAndUpdate(
-      input.id,
-      {
-        $set: {
-          title: input.title,
-          code: input.code,
-          description: input.description,
-          tags: input.tags,
-          language: input.language,
-          howToUse: input.howToUse,
-          isPrivate: input.isPrivate
+  updateChakiboo: function({ input }, context) {
+    if (context.user) {
+      return db.Chakiboo.findById(input.id).then(dbChakiboo => {
+        if (context.user.id === dbChakiboo.author) {
+          return db.Chakiboo.findByIdAndUpdate(
+            input.id,
+            {
+              $set: {
+                title: input.title,
+                code: input.code,
+                description: input.description,
+                tags: input.tags,
+                language: input.language,
+                howToUse: input.howToUse,
+                isPrivate: input.isPrivate
+              }
+            },
+            { new: true }
+          ).then(data => {
+            return new Chakiboo(data._id, {
+              title: data.title,
+              code: data.code,
+              description: data.description,
+              tags: data.tags,
+              language: data.language,
+              howToUse: data.howToUse,
+              isPrivate: data.isPrivate,
+              author: data.author
+            });
+          });
         }
-      },
-      { new: true }
-    ).then(data => {
-      return new Chakiboo(data._id, {
-        title: data.title,
-        code: data.code,
-        description: data.description,
-        tags: data.tags,
-        language: data.language,
-        howToUse: data.howToUse,
-        isPrivate: data.isPrivate
       });
-    });
+    }
   },
   deleteChakiboo: function({ id }) {
     return db.Chakiboo.findByIdAndRemove(id)

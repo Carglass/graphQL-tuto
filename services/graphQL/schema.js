@@ -63,6 +63,7 @@ module.exports = buildSchema(`
     chakiboos: [Chakiboo]
     chakiboo(id: ID): Chakiboo
     author(id: ID): Author
+    me: Author
   }
 
   type Mutation {
