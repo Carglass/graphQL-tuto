@@ -80,9 +80,10 @@ module.exports = app => {
     res.send({ user: req.user });
   });
 
-  app.post("/login", passport.authenticate("local"), function(req, res) {
-    
-    res.json(req.user.username);
+  app.post("/login", function(req, res) {
+    passport.authenticate("local")(req, res, function() {
+      res.json(req.user.username);
+    });
   });
 
   app.get("/logout", function(req, res) {
