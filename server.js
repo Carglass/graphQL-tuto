@@ -17,7 +17,7 @@ var app = express();
 
 // Configure middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 //authentication
 require("./services/authentication/auth")(app);
