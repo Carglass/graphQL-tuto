@@ -18,6 +18,7 @@ var app = express();
 // Configure middleware
 app.use(bodyParser.json());
 app.use(cors({ origin: "*", credentials: true }));
+app.options("*", cors());
 
 //authentication
 require("./services/authentication/auth")(app);
