@@ -37,7 +37,10 @@ module.exports = app => {
     session({
       secret: "keyboard puppy",
       resave: false,
-      saveUninitialized: false
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 1000000
+      }
     })
   );
   // Initialize Passport!  Also use passport.session() middleware, to support
