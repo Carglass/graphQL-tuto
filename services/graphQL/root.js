@@ -73,18 +73,21 @@ module.exports = {
       });
     });
   },
-  createChakiboo: function({ input }) {
-    return db.Chakiboo.create(input).then(data => {
-      return new Chakiboo(data._id, {
-        title: data.title,
-        code: data.code,
-        description: data.description,
-        tags: data.tags,
-        language: data.language,
-        howToUse: data.howToUse,
-        isPrivate: data.isPrivate
+  createChakiboo: function({ input }, context) {
+    if (context.user) {
+      return db.Chakiboo.create(input).then(data => {
+        return new Chakiboo(data._id, {
+          title: data.title,
+          code: data.code,
+          description: data.description,
+          tags: data.tags,
+          language: data.language,
+          howToUse: data.howToUse,
+          isPrivate: data.isPrivate,
+          author: context.user.id
+        });
       });
-    });
+    }
   },
   updateChakiboo: function({ input }) {
     return db.Chakiboo.findByIdAndUpdate(
