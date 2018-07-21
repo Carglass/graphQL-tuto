@@ -171,12 +171,18 @@ module.exports = {
     }
   },
   deleteChakiboo: function({ id }) {
-    return db.Chakiboo.findByIdAndRemove(id)
-      .then(data => {
-        return { id: data._id, status: "ok" };
-      })
-      .catch(err => {
-        return { id: id, status: "failure" };
+    if (context.user) {
+      return db.Chakiboo.findById(id).then(dbChakiboo => {
+        if (context.user.id === dbChakiboo.author) {
+          return db.Chakiboo.findByIdAndRemove(id)
+            .then(data => {
+              return { id: data._id, status: "ok" };
+            })
+            .catch(err => {
+              return { id: id, status: "failure" };
+            });
+        }
       });
+    }
   }
 };
