@@ -105,7 +105,9 @@ module.exports = {
     });
   },
   createChakiboo: function({ input }, context) {
+    console.log(input);
     if (context.user) {
+      console.log(context.user);
       const newChakiboo = {
         title: input.title,
         code: input.code,
