@@ -90,8 +90,8 @@ module.exports = app => {
   });
 
   app.get("/test/login", function(req, res) {
-    req.body.username = "Max";
-    req.body.password = "Burlat";
+    req.body.username = "Bill";
+    req.body.password = "Cork";
     passport.authenticate("local")(req, res, function() {
       res.json(req.user.username);
     });

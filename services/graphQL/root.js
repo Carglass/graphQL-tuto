@@ -141,7 +141,7 @@ module.exports = {
   updateChakiboo: function({ input }, context) {
     if (context.user) {
       return db.Chakiboo.findById(input.id).then(dbChakiboo => {
-        if (context.user.id === dbChakiboo.author) {
+        if (context.user.id == dbChakiboo.author) {
           return db.Chakiboo.findByIdAndUpdate(
             input.id,
             {
@@ -172,10 +172,10 @@ module.exports = {
       });
     }
   },
-  deleteChakiboo: function({ id }) {
+  deleteChakiboo: function({ id }, context) {
     if (context.user) {
       return db.Chakiboo.findById(id).then(dbChakiboo => {
-        if (context.user.id === dbChakiboo.author) {
+        if (context.user.id == dbChakiboo.author) {
           return db.Chakiboo.findByIdAndRemove(id)
             .then(data => {
               return { id: data._id, status: "ok" };
@@ -183,7 +183,43 @@ module.exports = {
             .catch(err => {
               return { id: id, status: "failure" };
             });
+        } else {
+          return { id: id, status: "only the author can delete a Chakiboo" };
         }
+      });
+    }
+  },
+  forkChakiboo: function({ id }, context) {
+    if (context.user) {
+      return db.Chakiboo.findById(id).then(dbChakiboo => {
+        const newChakiboo = {
+          title: dbChakiboo.title,
+          code: dbChakiboo.code,
+          description: dbChakiboo.description,
+          tags: dbChakiboo.tags,
+          language: dbChakiboo.language,
+          howToUse: dbChakiboo.howToUse,
+          isPrivate: dbChakiboo.isPrivate,
+          author: context.user.id
+        };
+        return db.Chakiboo.create(newChakiboo).then(data => {
+          return db.User.findById(context.user.id).then(dbAuthor => {
+            dbAuthor.chakiboos.push(data);
+            return dbAuthor.save().then(confirm => {
+              console.log(data);
+              return new Chakiboo(data._id, {
+                title: data.title,
+                code: data.code,
+                description: data.description,
+                tags: data.tags,
+                language: data.language,
+                howToUse: data.howToUse,
+                isPrivate: data.isPrivate,
+                author: data.author
+              });
+            });
+          });
+        });
       });
     }
   }

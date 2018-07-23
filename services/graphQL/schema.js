@@ -71,5 +71,6 @@ module.exports = buildSchema(`
     createChakiboo(input: ChakibooCreationInput): Chakiboo
     updateChakiboo(input: ChakibooUpdateInput): Chakiboo
     deleteChakiboo(id: ID!): ChakibooDeletePayload
+    forkChakiboo(id: ID!): Chakiboo
   }
 `);
