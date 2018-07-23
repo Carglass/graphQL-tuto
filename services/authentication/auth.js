@@ -99,7 +99,9 @@ module.exports = app => {
 
   app.get("/logout", function(req, res) {
     req.logout();
-    res.redirect("/");
+    req.session.destroy(function(err) {
+      res.redirect("/"); //Inside a callback… bulletproof!
+    });
   });
 
   app.get("/api/users/me", function(req, res) {
