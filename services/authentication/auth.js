@@ -100,7 +100,7 @@ module.exports = app => {
   app.get("/logout", function(req, res) {
     req.logout();
     req.session.destroy(function(err) {
-      res.redirect("/"); //Inside a callback… bulletproof!
+      res.json({ disconnected: true }); //Inside a callback… bulletproof!
     });
   });
 
