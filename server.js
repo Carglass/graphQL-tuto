@@ -32,8 +32,7 @@ require("./services/authentication/auth")(app);
 app.use(
   "/graphql",
   graphqlHTTP({
-    schema: require("./services/graphQL/schema"),
-    rootValue: require("./services/graphQL/root"),
+    schema: require("./services/graphQL/schema2"),
     graphiql: true
   })
 );
