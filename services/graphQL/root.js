@@ -52,24 +52,44 @@ module.exports = {
       });
     });
   },
-  chakiboos: function() {
-    return db.Chakiboo.find().then(data => {
-      let chakiboosToReturn = [];
-      for (piece of data) {
-        chakiboosToReturn.push(
-          new Chakiboo(piece._id, {
-            title: piece.title,
-            code: piece.code,
-            description: piece.description,
-            tags: piece.tags,
-            language: piece.language,
-            howToUse: piece.howToUse,
-            isPrivate: piece.isPrivate
-          })
-        );
-      }
-      return chakiboosToReturn;
-    });
+  chakiboos: function({ fromUser }, context) {
+    if (fromUser && context.user) {
+      return db.Chakiboo.find({ author: context.user.id }).then(data => {
+        let chakiboosToReturn = [];
+        for (piece of data) {
+          chakiboosToReturn.push(
+            new Chakiboo(piece._id, {
+              title: piece.title,
+              code: piece.code,
+              description: piece.description,
+              tags: piece.tags,
+              language: piece.language,
+              howToUse: piece.howToUse,
+              isPrivate: piece.isPrivate
+            })
+          );
+        }
+        return chakiboosToReturn;
+      });
+    } else {
+      return db.Chakiboo.find().then(data => {
+        let chakiboosToReturn = [];
+        for (piece of data) {
+          chakiboosToReturn.push(
+            new Chakiboo(piece._id, {
+              title: piece.title,
+              code: piece.code,
+              description: piece.description,
+              tags: piece.tags,
+              language: piece.language,
+              howToUse: piece.howToUse,
+              isPrivate: piece.isPrivate
+            })
+          );
+        }
+        return chakiboosToReturn;
+      });
+    }
   },
   chakiboo: function({ id }) {
     return db.Chakiboo.findById(id).then(data => {

@@ -60,7 +60,7 @@ module.exports = buildSchema(`
 
   type Query {
     tag(id: ID!): Tag
-    chakiboos: [Chakiboo]
+    chakiboos(fromUser: Boolean): [Chakiboo]
     chakiboo(id: ID): Chakiboo
     author(id: ID): Author
     me: Author
