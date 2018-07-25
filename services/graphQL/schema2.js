@@ -70,7 +70,7 @@ const KettlecatQueryRootType = new GraphQLObjectType({
   })
 });
 
-const CreateChakibooInput = new GraphQLInputObjectType({
+const ChakibooInput = new GraphQLInputObjectType({
   name: "CreateChakibooInput",
   description: "The parameters available at chakiboo creation",
   fields: () => ({
@@ -88,11 +88,31 @@ const KettlecatMutationRootType = new GraphQLObjectType({
   fields: () => ({
     createChakiboo: {
       type: ChakibooType,
-      args: { input: { type: CreateChakibooInput } },
+      args: { input: { type: ChakibooInput } },
       resolve: function(obj, { input }, context, info) {
         if (context.user) {
           const newChakiboo = Object.assign(input, { author: context.user.id });
           return db.Chakiboo.create(newChakiboo).then(dbChakiboo => dbChakiboo);
+        }
+      }
+    },
+    updateChakiboo: {
+      type: ChakibooType,
+      args: {
+        id: { type: GraphQLString },
+        input: { type: ChakibooInput }
+      },
+      resolve: function(obj, { id, input }, context, info) {
+        if (context.user) {
+          return db.Chakiboo.findById(id).then(dbChakiboo => {
+            if (context.user.id == dbChakiboo.author) {
+              return db.Chakiboo.findByIdAndUpdate(
+                id,
+                { $set: input },
+                { new: true }
+              ).then(updatedChakiboo => updatedChakiboo);
+            }
+          });
         }
       }
     }
