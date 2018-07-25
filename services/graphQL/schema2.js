@@ -82,7 +82,7 @@ const ChakibooInput = new GraphQLInputObjectType({
   name: "CreateChakibooInput",
   description: "The parameters available at chakiboo creation",
   fields: () => ({
-    title: { type: new GraphQLNonNull(GraphQLString) },
+    title: { type: GraphQLString },
     description: { type: GraphQLString },
     code: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
