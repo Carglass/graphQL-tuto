@@ -19,7 +19,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://kettlecat-team.github.io/login"],
+    origin: ["http://localhost:3000", "https://kettlecat-team.github.io/"],
     credentials: true
   })
 );
@@ -32,8 +32,7 @@ require("./services/authentication/auth")(app);
 app.use(
   "/graphql",
   graphqlHTTP({
-    schema: require("./services/graphQL/schema"),
-    rootValue: require("./services/graphQL/root"),
+    schema: require("./services/graphQL/schema2"),
     graphiql: true
   })
 );
