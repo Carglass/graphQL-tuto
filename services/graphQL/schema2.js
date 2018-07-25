@@ -88,20 +88,20 @@ const KettlecatMutationRootType = new GraphQLObjectType({
   fields: () => ({
     createChakiboo: {
       type: ChakibooType,
-      args: { input: CreateChakibooInput },
+      args: { input: { type: CreateChakibooInput } },
       resolve: function(obj, { input }, context, info) {
-        if(context.user) {
-          const newChakiboo = Object.assign(input, context.user.id);
-          return db.Chakiboo.create(newChakiboo)
+        if (context.user) {
+          const newChakiboo = Object.assign(input, { author: context.user.id });
+          return db.Chakiboo.create(newChakiboo).then(dbChakiboo => dbChakiboo);
         }
-        return db.Chakiboo.create(input)
       }
     }
   })
 });
 
 const KettleCatAppSchema = new GraphQLSchema({
-  query: KettlecatQueryRootType
+  query: KettlecatQueryRootType,
+  mutation: KettlecatMutationRootType
 });
 
 module.exports = KettleCatAppSchema;
