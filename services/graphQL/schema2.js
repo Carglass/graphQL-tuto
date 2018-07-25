@@ -34,7 +34,7 @@ const ChakibooType = new GraphQLObjectType({
   description: "This is a boilerplate Meow",
   fields: () => ({
     id: { type: new GraphQLNonNull(GraphQLString) },
-    title: { type: new GraphQLNonNull(GraphQLString) },
+    title: { type: GraphQLString },
     description: { type: GraphQLString },
     code: { type: GraphQLString },
     tags: { type: new GraphQLList(GraphQLString) },
