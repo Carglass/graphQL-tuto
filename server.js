@@ -19,7 +19,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://kettlecat-team.github.io/"],
+    origin: ["http://localhost:3000", "https://kettlecat-team.github.io"],
     credentials: true
   })
 );
