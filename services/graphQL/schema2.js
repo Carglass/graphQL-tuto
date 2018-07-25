@@ -66,6 +66,14 @@ const KettlecatQueryRootType = new GraphQLObjectType({
       resolve: function(obj, { id }, context, info) {
         return db.User.findById(id);
       }
+    },
+    chakiboo: {
+      type: ChakibooType,
+      args: { id: { type: GraphQLString } },
+      description: "A Chakiboo",
+      resolve: function(obj, { id }, context, info) {
+        return db.Chakiboo.findById(id);
+      }
     }
   })
 });
@@ -88,6 +96,7 @@ const KettlecatMutationRootType = new GraphQLObjectType({
   fields: () => ({
     createChakiboo: {
       type: ChakibooType,
+      description: "Create a Chakiboo, need to be logged",
       args: { input: { type: ChakibooInput } },
       resolve: function(obj, { input }, context, info) {
         if (context.user) {
@@ -98,6 +107,7 @@ const KettlecatMutationRootType = new GraphQLObjectType({
     },
     updateChakiboo: {
       type: ChakibooType,
+      description: "Update a Chakiboo, need to be logged as the author",
       args: {
         id: { type: GraphQLString },
         input: { type: ChakibooInput }
@@ -112,6 +122,48 @@ const KettlecatMutationRootType = new GraphQLObjectType({
                 { new: true }
               ).then(updatedChakiboo => updatedChakiboo);
             }
+          });
+        }
+      }
+    },
+    deleteChakiboo: {
+      type: GraphQLString,
+      description: "Delete a Chakiboo, need to be logged as the author",
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: function(obj, { id }, context, info) {
+        if (context.user) {
+          return db.Chakiboo.findById(id).then(dbChakiboo => {
+            if (context.user.id == dbChakiboo.author) {
+              return db.Chakiboo.findByIdAndRemove(id).then(
+                deletedChakiboo => deletedChakiboo._id
+              );
+            }
+          });
+        }
+      }
+    },
+    forkChakiboo: {
+      type: ChakibooType,
+      description: "Fork the chakiboo from another user, need to be logged",
+      args: {
+        id: { type: GraphQLString }
+      },
+      resolve: function(obj, { id }, context, info) {
+        if (context.user) {
+          return db.Chakiboo.findById(id).then(dbChakibooToFork => {
+            const newChakiboo = {
+              title: dbChakibooToFork.title,
+              code: dbChakibooToFork.code,
+              description: dbChakibooToFork.description,
+              tags: dbChakibooToFork.tags,
+              language: dbChakibooToFork.language,
+              author: context.user.id
+            };
+            return db.Chakiboo.create(newChakiboo).then(
+              dbChakibooForked => dbChakibooForked
+            );
           });
         }
       }
