@@ -85,7 +85,7 @@ module.exports = app => {
 
   app.post("/login", function(req, res) {
     passport.authenticate("local")(req, res, function() {
-      res.json(req.user.username);
+      res.json({ username: req.user.username, id: req.user.id });
     });
   });
 
@@ -93,7 +93,7 @@ module.exports = app => {
     req.body.username = "Max";
     req.body.password = "Burlat";
     passport.authenticate("local")(req, res, function() {
-      res.json(req.user.username);
+      res.json({ username: req.user.username, id: req.user.id });
     });
   });
 
