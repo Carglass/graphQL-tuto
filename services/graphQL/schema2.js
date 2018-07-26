@@ -54,9 +54,14 @@ const KettlecatQueryRootType = new GraphQLObjectType({
   fields: () => ({
     chakiboos: {
       type: new GraphQLList(ChakibooType),
+      args: { tag: { type: GraphQLString } },
       description: "List of all chakiboos",
-      resolve: function() {
-        return db.Chakiboo.find({});
+      resolve: function(obj, { tag }, context, info) {
+        if (tag) {
+          return db.Chakiboo.find({ tags: tag });
+        } else {
+          return db.Chakiboo.find({});
+        }
       }
     },
     author: {
